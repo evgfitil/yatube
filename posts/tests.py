@@ -101,7 +101,8 @@ class PostsTest(TestCase):
 
         # Checking the image tag on the user profile page
         response = self.client.get('/someuser/')
-        self.assertContains(response, '<img', count=1, status_code=200)
+        self.assertContains(response.content.decode('utf-8'), '<img')
+        # self.assertContains(response, '<img', count=1, status_code=200)
         self.assertContains(response, self.post.text, count=1, status_code=200)
         
         # Checking the image tag on the post page
