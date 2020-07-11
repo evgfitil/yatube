@@ -1,5 +1,5 @@
 {% extends "base.html" %} 
-{% block title %} Посты избранных авторов {% endblock %}
+{% block title %} Posts of favorite authors {% endblock %}
 
 {% block content %}
 
@@ -8,7 +8,7 @@
     {% include "menu.html" with index=True %}
 
     <div class="table">
-        <h1> Посты избранных авторов </h1>
+        <h1> Posts of favorite authors </h1>
 
         {% for post in page %}
             {% include "post_item.html" with post=post %}

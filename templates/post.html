@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Пост автора{% endblock %}
+{% block title %}Author's post{% endblock %}
 {% block content %}
 {% load user_filters %}
 <main role="main" class="container">
@@ -8,25 +8,25 @@
                 <div class="card">
                         <div class="card-body">
                                 <div class="h2">
-                                    <!-- Имя автора -->
+                                    <!-- Author's name -->
                                     {{ post.author.get_full_name }}
                                 </div>
                                 <div class="h3 text-muted">
-                                     <!-- username автора -->
+                                     <!-- Author's username -->
                                      {{ post.author.get_username }}
                                 </div>
                         </div>
                         <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
                                         <div class="h6 text-muted">
-                                        Подписчиков: {{ followers_count }} <br />
-                                        Подписан: {{ following_count }}
+                                        Followers: {{ followers_count }} <br />
+                                        Following: {{ following_count }}
                                         </div>
                                 </li>
                                 <li class="list-group-item">
                                         <div class="h6 text-muted">
-                                            <!--Количество записей -->
-                                            Записей: {{ posts_count }}
+                                            <!-- Posts count -->
+                                            Posts count: {{ posts_count }}
                                         </div>
                                 </li>
                         </ul>
@@ -35,7 +35,7 @@
 
         <div class="col-md-9">
 
-            <!-- Пост -->  
+            <!-- Post -->  
                 <div class="card mb-3 mt-1 shadow-sm">
                         {% load thumbnail %}
                         {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
@@ -43,19 +43,19 @@
                         {% endthumbnail %}
                         <div class="card-body">
                                 <p class="card-text">
-                                        <!-- Ссылка на страницу автора в атрибуте href; username автора в тексте ссылки -->
+                                        <!-- Link to the author's page in the href attribute; author's username in link text -->
                                         <a href="/{{ post.author.get_username }}/"><strong class="d-block text-gray-dark">@{{ post.author.get_username }}</strong></a>
-                                        <!-- Текст поста -->
+                                        <!-- Post text -->
                                         {{ post.text }}
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center">
                                         {% if post.author.get_username == user.username %}
                                         <div class="btn-group ">
-                                                <!-- Ссылка на редактирование, показывается только автору записи -->
-                                                <a class="btn btn-sm text-muted" href="/{{ author.get_username }}/{{ author_post.id }}/edit" role="button">Редактировать</a>
+                                                <!-- Edit link, is shown only to the posts author -->
+                                                <a class="btn btn-sm text-muted" href="/{{ author.get_username }}/{{ author_post.id }}/edit" role="button">Edit post</a>
                                         </div>
                                         {% endif %}
-                                        <!-- Дата публикации  -->
+                                        <!-- Pub date  -->
                                         <small class="text-muted">{{ post.pub_date|date:"d M Y H:i"}}</small>
                                 </div>
                                 {% include 'comments.html' %}

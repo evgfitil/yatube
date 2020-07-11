@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}
-  {% if post_edit %}Редактировать запись
-  {% else %}Добавить запись
+  {% if post_edit %}Edit post
+  {% else %}Add post
   {% endif %}
 {% endblock %}
 {% block content %}
@@ -10,8 +10,8 @@
     <div class="col-md-8 p-5">
         <div class="card">
             <div class="card-header">
-                {% if post_edit %}Редактировать запись
-                {% else %}Добавить запись
+                {% if post_edit %}Edit post
+                {% else %}Add post
                 {% endif %}
             </div>
             <div class="card-body">
@@ -23,7 +23,7 @@
                       <div class="form-group row" aria-required={% if field.required %}"true"{% else %}"false"{% endif %}>
                                     <label for="{{ field.id_for_label }}" class="col-md-4 col-form-label text-md-right">{{ field.label }}{% if field.required %}<span class="required">*</span>{% endif %}</label>
                                     <div class="col-md-6">
-                                        {# подключаем фильтр и указываем класс #}
+                                        {# connect the filter and specify the class #}
                                         {{ field|addclass:"form-control" }}
                                         {% if field.help_text %}
                                         <small id="{{ field.id_for_label }}-help" class="form-text text-muted">{{ field.help_text|safe }}</small>
@@ -34,8 +34,8 @@
 
                     <div class="col-md-6 offset-md-4">              
                             <button type="submit" class="btn btn-primary">
-                                {% if post_edit %}Сохранить
-                                {% else %}Добавить
+                                {% if post_edit %}Save
+                                {% else %}Add
                                 {% endif %}
                             </button>
                     </div>

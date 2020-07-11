@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Профиль автора{% endblock %}
+{% block title %}Author's profile{% endblock %}
 {% block content %}
 {% load user_filters %}
 <main role="main" class="container">
@@ -8,19 +8,19 @@
                     <div class="card">
                             <div class="card-body">
                                     <div class="h2">
-                                        <!-- Имя автора -->
+                                        <!-- Author's name -->
                                         {{ author.get_full_name }}
                                     </div>
                                     <div class="h3 text-muted">
-                                         <!-- username автора -->
+                                         <!-- Author's username -->
                                          {{ author.get_username }}
                                     </div>
                             </div>
                             <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
                                             <div class="h6 text-muted">
-                                            Подписчиков: {{ followers_count }}  <br />
-                                            Подписан: {{ following_count }}
+                                            Followers: {{ followers_count }}  <br />
+                                            Following: {{ following_count }}
                                             </div>
                                     </li>
                                     {% if following != 'Self' %}
@@ -28,20 +28,20 @@
                                         {% if following == True %}
                                         <a class="btn btn-lg btn-light" 
                                                 href="{% url 'profile_unfollow' author.username %}" role="button"> 
-                                                Отписаться 
+                                                Unsubscribe 
                                         </a> 
                                         {% else %}
                                         <a class="btn btn-lg btn-primary" 
                                                 href="{% url 'profile_follow' author.username %}" role="button">
-                                        Подписаться 
+                                        Subscribe
                                         </a>
                                         {% endif %}
                                     {% endif %}
                                     </li>
                                     <li class="list-group-item">
                                             <div class="h6 text-muted">
-                                                <!-- Количество записей -->
-                                                Записей: {{ posts_count }}
+                                                <!-- Posts count -->
+                                                Posts count: {{ posts_count }}
                                             </div>
                                     </li>
                             </ul>
@@ -50,11 +50,11 @@
 
             <div class="col-md-9">
 
-                <!-- Повторяющиеся записи --> 
+                <!-- Posts on this page --> 
                 {% for post in page %}
                     {% include "post_item.html" with post=post %}
                 {% endfor %}
-                <!-- Остальные посты -->
+                <!-- Other posts -->
                 {% if page.has_other_pages %}
                     {% include "paginator.html" with items=page paginator=paginator%}
                 {% endif %}
