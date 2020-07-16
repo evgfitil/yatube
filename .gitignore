@@ -14,12 +14,12 @@ __pycache__/
 *.sublime-project
 *.sublime-workspace
 
-static/
-posts/static/
-media/
+/media
 
 db.sqlite3
 Dockerfile
 Docker-compose.yml
 env.dev
 .dockerignore
+.env.prod
+.env.prod.db
