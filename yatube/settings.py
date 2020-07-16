@@ -75,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -147,15 +148,21 @@ LOGIN_REDIRECT_URL = "index"
 # LOGOUT_REDIRECT_URL = "index"
 
 # Plug in the engine filebased.EmailBackend
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 # Specify the directory where the mail files will be stored
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 # Current site identifier
 SITE_ID = 1
 
-# Caches settings
+# Cache settings
+DEFAULT_CACHE = 'django.core.cache.backends.locmem.LocMemCache'
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'BACKEND': os.environ.get('CACHE_ENGINE', DEFAULT_CACHE),
+        'LOCATION': os.environ.get('CACHE_LOCATION', 'redis://cache:6379/0'),
+        'OPTIONS': {
+            'PASSWORD': os.environ.get('REDIS_PASSWORD'),
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
