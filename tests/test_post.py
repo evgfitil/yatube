@@ -22,38 +22,38 @@ class TestPostView:
         try:
             response = client.get(f'/{post_with_group.author.username}/{post_with_group.id}')
         except Exception as e:
-            assert False, f'''Страница `/<username>/<post_id>/` работает неправильно. Ошибка: `{e}`'''
+            assert False, f'''The page `/<username>/<post_id>/` is not working properly. Error: `{e}`'''
         if response.status_code in (301, 302):
             response = client.get(f'/{post_with_group.author.username}/{post_with_group.id}/')
         assert response.status_code != 404, \
-            'Страница `/<username>/<post_id>/` не найдена, проверьте этот адрес в *urls.py*'
+            'The page `/<username>/<post_id>/` is not found, check it in *urls.py*'
 
         profile_context = get_field_context(response.context, get_user_model())
         assert profile_context is not None, \
-            'Проверьте, что передали автора в контекст страницы `/<username>/<post_id>/`'
+            'Check that you passed the `author` variable into the context of the page `/<username>/<post_id>/`'
 
         post_context = get_field_context(response.context, Post)
         assert post_context is not None, \
-            'Проверьте, что передали статью в контекст страницы `/<username>/<post_id>/` типа `Post`'
+            'Check that you passed the post into the context of the page `/<username>/<post_id>/`'
 
         try:
             from posts.forms import CommentForm
         except ImportError:
-            assert False, 'Не найдена форма CommentForm в posts.form'
+            assert False, 'CommentForm is not found'
 
         comment_form_context = get_field_context(response.context, CommentForm)
         assert comment_form_context is not None, \
-            'Проверьте, что передали форму комментария в контекст страницы `/<username>/<post_id>/` типа `CommentForm`'
+            'Check that you passed form `CommentForm` into the context of the page `/<username>/<post_id>/`'
         assert len(comment_form_context.fields) == 1, \
-            'Проверьте, что форма комментария в контекстке страницы `/<username>/<post_id>/` состоит из одного поля'
+            'Check that the form have a 1 title'
         assert 'text' in comment_form_context.fields, \
-            'Проверьте, что форма комментария в контекстке страницы `/<username>/<post_id>/` содержится поле `text`'
+            'Check that the form have a `text` title'
         assert type(comment_form_context.fields['text']) == forms.fields.CharField, \
-            'Проверьте, что форма комментария в контекстке страницы `/<username>/<post_id>/` содержится поле `text` типа `CharField`'
+            'Check that the `text` type is `CharField`'
 
         comment_context = get_field_context(response.context, QuerySet)
         assert comment_context is not None, \
-            'Проверьте, что передали список комментариев в контекст страницы `/<username>/<post_id>/` типа `QuerySet`'
+            'Check that you passed list of comments with `QuerySet` type into the context of the page `/<username>/<post_id>/`'
 
 
 class TestPostEditView:
@@ -63,52 +63,52 @@ class TestPostEditView:
         try:
             response = client.get(f'/{post_with_group.author.username}/{post_with_group.id}/edit')
         except Exception as e:
-            assert False, f'''Страница `/<username>/<post_id>/edit/` работает неправильно. Ошибка: `{e}`'''
+            assert False, f'''The page `/<username>/<post_id>/edit/` is not working properly. Error: `{e}`'''
         if response.status_code in (301, 302) and not response.url.startswith(f'/{post_with_group.author.username}/{post_with_group.id}'):
             response = client.get(f'/{post_with_group.author.username}/{post_with_group.id}/edit/')
         assert response.status_code != 404, \
-            'Страница `/<username>/<post_id>/edit/` не найдена, проверьте этот адрес в *urls.py*'
+            'The page `/<username>/<post_id>/edit/` is not found, check it in *urls.py*'
 
         assert response.status_code in (301, 302), \
-            'Проверьте, что вы переадресуете пользователя со страницы `/<username>/<post_id>/edit/` на страницу поста, если он не автор'
+            'Check the redirection if a user does not post author'
 
     @pytest.mark.django_db(transaction=True)
     def test_post_edit_view_author_get(self, user_client, post_with_group):
         try:
             response = user_client.get(f'/{post_with_group.author.username}/{post_with_group.id}/edit')
         except Exception as e:
-            assert False, f'''Страница `/<username>/<post_id>/edit/` работает неправильно. Ошибка: `{e}`'''
+            assert False, f'''The page `/<username>/<post_id>/edit/` is not working properly. Error: `{e}`'''
         if response.status_code in (301, 302):
             response = user_client.get(f'/{post_with_group.author.username}/{post_with_group.id}/edit/')
         assert response.status_code != 404, \
-            'Страница `/<username>/<post_id>/edit/` не найдена, проверьте этот адрес в *urls.py*'
+            'The page `/<username>/<post_id>/edit/` is not found, check it in *urls.py*'
 
         post_context = get_field_context(response.context, Post)
         assert post_context is not None, \
-            'Проверьте, что передали статью в контекст страницы `/<username>/<post_id>/edit/` типа `Post`'
+            'Check that you passed the post into the context of the page `/<username>/<post_id>/edit/`'
 
         assert 'form' in response.context, \
-            'Проверьте, что передали форму `form` в контекст страницы `/<username>/<post_id>/edit/`'
+            'Check that you passed form into the context of the page `/<username>/<post_id>/edit/`'
         assert len(response.context['form'].fields) == 3, \
-            'Проверьте, что в форме `form` на страницу `/<username>/<post_id>/edit/` 3 поля'
+            'Check that the form on the page `/<username>/<post_id>/edit/` have a 3 title'
         assert 'group' in response.context['form'].fields, \
-            'Проверьте, что в форме `form` на странице `/<username>/<post_id>/edit/` есть поле `group`'
+            'Check tha the `form` on the page `/<username>/<post_id>/edit/` have a `group` title'
         assert type(response.context['form'].fields['group']) == forms.models.ModelChoiceField, \
-            'Проверьте, что в форме `form` на странице `/<username>/<post_id>/edit/` поле `group` типа `ModelChoiceField`'
+            'Check that the `group` title type is `ModelChoiceField`'
         assert not response.context['form'].fields['group'].required, \
-            'Проверьте, что в форме `form` на странице `/<username>/<post_id>/edit/` поле `group` не обязательно'
+            'Check that the `group` title is not required'
 
         assert 'text' in response.context['form'].fields, \
-            'Проверьте, что в форме `form` на странице `/<username>/<post_id>/edit/` есть поле `text`'
+            'Check that the `form` have a `text` title'
         assert type(response.context['form'].fields['text']) == forms.fields.CharField, \
-            'Проверьте, что в форме `form` на странице `/<username>/<post_id>/edit/` поле `text` типа `CharField`'
+            'Check tha the `text` title type is `CharField`'
         assert response.context['form'].fields['text'].required, \
-            'Проверьте, что в форме `form` на странице `/<username>/<post_id>/edit/` поле `group` обязательно'
+            'Check that the `group` title is required'
 
         assert 'image' in response.context['form'].fields, \
-            'Проверьте, что в форме `form` на странице `/<username>/<post_id>/edit/` есть поле `image`'
+            'Check that the `form` have a `image` title'
         assert type(response.context['form'].fields['image']) == forms.fields.ImageField, \
-            'Проверьте, что в форме `form` на странице `/<username>/<post_id>/edit/` поле `image` типа `ImageField`'
+            'Check that the `image` title type is `ImageField`'
 
     @staticmethod
     def get_image_file(name, ext='png', size=(50, 50), color=(256, 0, 0)):
@@ -120,20 +120,20 @@ class TestPostEditView:
 
     @pytest.mark.django_db(transaction=True)
     def test_post_edit_view_author_post(self, user_client, post_with_group):
-        text = 'Проверка изменения поста!'
+        text = 'Post changes check!'
         try:
             response = user_client.get(f'/{post_with_group.author.username}/{post_with_group.id}/edit')
         except Exception as e:
-            assert False, f'''Страница `/<username>/<post_id>/edit/` работает неправильно. Ошибка: `{e}`'''
+            assert False, f'''The page `/<username>/<post_id>/edit/` is not working properly. Error: `{e}`'''
         url = f'/{post_with_group.author.username}/{post_with_group.id}/edit/' if response.status_code in (301, 302) else f'/{post_with_group.author.username}/{post_with_group.id}/edit'
 
         image = self.get_image_file('image2.png')
         response = user_client.post(url, data={'text': text, 'group': post_with_group.group_id, 'image': image})
 
         assert response.status_code in (301, 302), \
-            'Проверьте, что со страницы `/<username>/<post_id>/edit/` после создания поста перенаправляете на страницу поста'
+            'Check the redirection to the post page after the post changed'
         post = Post.objects.filter(author=post_with_group.author, text=text, group=post_with_group.group).first()
         assert post is not None, \
-            'Проверьте, что вы изминили пост при отправки формы на странице `/<username>/<post_id>/edit/`'
+            'Check the post has changed'
         assert response.url.startswith(f'/{post_with_group.author.username}/{post_with_group.id}'),\
-            'Проверьте, что перенаправляете на страницу поста `/<username>/<post_id>/`'
+            'Check the redirection to the page `/<username>/<post_id>/`'

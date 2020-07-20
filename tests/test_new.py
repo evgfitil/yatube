@@ -14,30 +14,30 @@ class TestNewView:
         try:
             response = user_client.get('/new')
         except Exception as e:
-            assert False, f'''Страница `/new` работает неправильно. Ошибка: `{e}`'''
+            assert False, f'''The page `/new` is not working properly. Error: `{e}`'''
         if response.status_code in (301, 302):
             response = user_client.get('/new/')
-        assert response.status_code != 404, 'Страница `/new/` не найдена, проверьте этот адрес в *urls.py*'
-        assert 'form' in response.context, 'Проверьте, что передали форму `form` в контекст страницы `/new/`'
-        assert len(response.context['form'].fields) == 3, 'Проверьте, что в форме `form` на страницу `/new/` 3 поля'
+        assert response.status_code != 404, 'The `/new/` page is not found, check it in *urls.py*'
+        assert 'form' in response.context, 'Check that you passed the `form` variable into the context of the `/new/` page'
+        assert len(response.context['form'].fields) == 3, 'Check that the `form` on the `/new/` page have a 3 title'
         assert 'group' in response.context['form'].fields, \
-            'Проверьте, что в форме `form` на странице `/new/` есть поле `group`'
+            'Check that the `form` on the `new` page have a `group` title'
         assert type(response.context['form'].fields['group']) == forms.models.ModelChoiceField, \
-            'Проверьте, что в форме `form` на странице `/new/` поле `group` типа `ModelChoiceField`'
+            'Check that the `form` on the `new` page have a `group` title with `ModelChoiceField` type'
         assert not response.context['form'].fields['group'].required, \
-            'Проверьте, что в форме `form` на странице `/new/` поле `group` не обязательно'
+            'Check that the `group` title is not required'
 
         assert 'text' in response.context['form'].fields, \
-            'Проверьте, что в форме `form` на странице `/new/` есть поле `text`'
+            'Check that the `form` on the `new` page have a `text` title'
         assert type(response.context['form'].fields['text']) == forms.fields.CharField, \
-            'Проверьте, что в форме `form` на странице `/new/` поле `text` типа `CharField`'
+            'Check that the `form` on the `new` page have a `text` title with `CharField` type'
         assert response.context['form'].fields['text'].required, \
-            'Проверьте, что в форме `form` на странице `/new/` поле `group` обязательно'
+            'Check that the `text` title is required'
 
         assert 'image' in response.context['form'].fields, \
-            'Проверьте, что в форме `form` на странице `/new/` есть поле `image`'
+            'Check that the `form` on the `new` page have a `image` title'
         assert type(response.context['form'].fields['image']) == forms.fields.ImageField, \
-            'Проверьте, что в форме `form` на странице `/new/` поле `image` типа `ImageField`'
+            'Check that the `form` on the `new` page have a `image` title with `ImageField` type'
 
     @staticmethod
     def get_image_file(name, ext='png', size=(50, 50), color=(256, 0, 0)):
@@ -49,31 +49,31 @@ class TestNewView:
 
     @pytest.mark.django_db(transaction=True)
     def test_new_view_post(self, user_client, user, group):
-        text = 'Проверка нового поста!'
+        text = 'New post check!'
         try:
             response = user_client.get('/new')
         except Exception as e:
-            assert False, f'''Страница `/new` работает неправильно. Ошибка: `{e}`'''
+            assert False, f'''The `/new` page is not working properly. Error: `{e}`'''
         url = '/new/' if response.status_code in (301, 302) else '/new'
 
         image = self.get_image_file('image.png')
         response = user_client.post(url, data={'text': text, 'group': group.id, 'image': image})
 
         assert response.status_code in (301, 302), \
-            'Проверьте, что со страницы `/new/` после создания поста перенаправляете на главную страницу'
+            'Check the redirection to the homepage after the post creation'
         post = Post.objects.filter(author=user, text=text, group=group).first()
-        assert post is not None, 'Проверьте, что вы сохранили новый пост при отправки формы на странице `/new/`'
-        assert response.url == '/', 'Проверьте, что перенаправляете на главную страницу `/`'
+        assert post is not None, 'Check that the post is saved'
+        assert response.url == '/', 'Check the redirection to the homepage `/`'
 
-        text = 'Проверка нового поста 2!'
+        text = 'New post check 2!'
         image = self.get_image_file('image2.png')
         response = user_client.post(url, data={'text': text, 'image': image})
         assert response.status_code in (301, 302), \
-            'Проверьте, что со страницы `/new/` после создания поста перенаправляете на главную страницу'
+            'Check the redirection to the homepage after the post creation'
         post = Post.objects.filter(author=user, text=text, group__isnull=True).first()
-        assert post is not None, 'Проверьте, что вы сохранили новый пост при отправки формы на странице `/new/`'
-        assert response.url == '/', 'Проверьте, что перенаправляете на главную страницу `/`'
+        assert post is not None, 'Check that the post is saved'
+        assert response.url == '/', 'Check the redirection to the homepage `/`'
 
         response = user_client.post(url)
         assert response.status_code == 200, \
-            'Проверьте, что на странице `/new/` выводите ошибки при неправильной заполненной формы `form`'
+            'Check that on-page `/new/` you are outputting errors if the form `form` is not completed correctly'
