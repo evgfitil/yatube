@@ -28,9 +28,9 @@ class TestProfileView:
 
         page_context = get_field_context(response.context, Page)
         assert page_context is not None, \
-            "Chek that you passed a author's post into the context of the page `/<username>/`"
+            "Check that you passed a author's post into the context of the page `/<username>/`"
         assert len(page_context.object_list) == 1, \
-            "Chek that you passed a author's post into the context of the page `/<username>/`"
+            "Check that you passed a author's post into the context of the page `/<username>/`"
 
         paginator_context = get_field_context(response.context, Paginator)
         assert paginator_context is not None, \
@@ -47,6 +47,6 @@ class TestProfileView:
 
         page_context = get_field_context(new_response.context, Page)
         assert page_context is not None, \
-            "Chek that you passed a author's post into the context of the page `/<username>/"
+            "Check that you passed a author's post into the context of the page `/<username>/"
         assert len(page_context.object_list) == 0, \
-            "Chek that you passed a author's post into the context of the page `/<username>/"
+            "Check that you passed a author's post into the context of the page `/<username>/"
