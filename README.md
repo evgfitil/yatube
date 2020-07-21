@@ -23,7 +23,7 @@ Demo site https://yatube.ea4ws.tk available with all authentication methods, inc
     yt-db - Postgres database
     yt-cache - Redis cache
   
-  To apply migrations and create Django admin user run:
+  To apply migrations and create a Django admin user run:
   ```
   docker exec -ti yt-web ./first-run.sh
   ```
@@ -33,4 +33,32 @@ Demo site https://yatube.ea4ws.tk available with all authentication methods, inc
   docker exec -ti yt-web pytest
   ```
   To confirm the reset of the user password use `sent_emails` folder on `yt-web` container `workdir` and then look into ``*.log`` files
+  
+### Without Docker
+
+  1. Clone this repository
+  2. Copy or rename `.env.local-example` file to `.env`
+  3. Create and activate a virtual environment
+  ```
+  pytho3 -m venv venv
+  source ./venv/bin/activate
+  ```
+  4. Install dependencies
+  ```
+  pip install -r requirements.txt
+  ```
+  5. To apply migrations and create a Django admin user run:
+  ```
+  python manage.py migrate
+  python manage.py createsuperuser
+  ```
+  6. Start server locally
+  ```
+  python manage.py runserver
+  ```
+  If everything went well, you now have a server running on http://localhost:8000
+  
+  You can also run `pytest` to make sure everything is ok
+  
+  To confirm the reset of the user password use `sent_emails` folder and look into ``*.log`` files
   
