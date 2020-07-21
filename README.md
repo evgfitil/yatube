@@ -28,4 +28,9 @@ Demo site https://yatube.ea4ws.tk available with all authentication methods, inc
   docker exec -ti yt-web ./first-run.sh
   ```
   To remove builder image run `docker image prune --filter label=stage=builder`
+  You can also run tests to make sure everything is ok, for that run:
+  ```
+  docker exec -ti yt-web pytest
+  ```
+  To confirm the reset of the user password use `sent_emails` folder on `yt-web` container `workdir` and then look into ``*.log`` files
   
