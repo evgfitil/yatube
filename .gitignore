@@ -20,6 +20,5 @@ db.sqlite3
 Dockerfile
 Docker-compose.yml
 env.dev
-.dockerignore
-.env.prod
-.env.prod.db
+.env
+.env.db
