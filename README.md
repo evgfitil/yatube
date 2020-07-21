@@ -18,10 +18,10 @@ Demo site https://yatube.ea4ws.tk available with all authentication methods, inc
   ```
   If everything went well, you now have a server running on http://localhost:1337 and four running containers:
   
-    * yt-web - container with Django app
-    * yt-nginx - Nginx reverse proxy for Gunicorn
-    * yt-db - Postgres database
-    * yt-cache - Redis cache
+    *yt-web - container with Django app
+    *yt-nginx - Nginx reverse proxy for Gunicorn
+    *yt-db - Postgres database
+    *yt-cache - Redis cache
   
   To apply migrations and create Django admin user run:
   ```
