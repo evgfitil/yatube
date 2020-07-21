@@ -17,8 +17,6 @@ __pycache__/
 /media
 
 db.sqlite3
-Dockerfile
-Docker-compose.yml
 env.dev
 .env
 .env.db
