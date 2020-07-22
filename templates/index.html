@@ -5,7 +5,7 @@
 {% block content %}
 
 {% load cache %}
-{% cache 30 index request.user.username %}
+{% cache 10 index request.user.username %}
 <main role="main" class="container">
 
     {% include "menu.html" with index=True %}
