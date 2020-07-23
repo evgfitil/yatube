@@ -9,7 +9,7 @@ from .forms import PostForm, CommentForm
 def index(request):
     posts = Post.objects.order_by('-pub_date')
     
-    paginator = Paginator(posts, 10)
+    paginator = Paginator(posts, 5)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     
@@ -23,7 +23,7 @@ def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
     posts = Post.objects.filter(group=group).order_by("-pub_date")
     
-    paginator = Paginator(posts, 12)
+    paginator = Paginator(posts, 5)
     page = paginator.get_page(request.GET.get('page'))
     
     return render(request, 'group.html', {
