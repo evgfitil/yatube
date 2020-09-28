@@ -9,7 +9,8 @@ class ProfileTest(TestCase):
         """User creation and email sending."""
         self.client = Client()
         self.user = User.objects.create_user(
-            username="someuser", email="someuser@somemail.com", password="somepassword"
+            username="someuser", email="someuser@somemail.com",
+            password="somepassword"
         )
         mail.send_mail(
             'Registration confirmation', 'Your registration was a success',
