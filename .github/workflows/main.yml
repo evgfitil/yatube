@@ -21,4 +21,4 @@ jobs:
           pip install -r requirements.txt
 
       - name: Lint wiht flake8
-        run: flake8 . --exclude=./api/migrations/*,./posts/migrations/*,./posts/settings.py
+        run: flake8 . --exclude=./api/migrations/*,./posts/migrations/*,./posts/settings.py,./tests/*
