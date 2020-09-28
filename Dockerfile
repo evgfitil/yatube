@@ -58,9 +58,6 @@ RUN chown -R app:app $HOME
 RUN sudo -H pip install --upgrade pip
 RUN sudo -H pip install --no-cache /wheels/*
 
-# copy entrypoint.sh
-COPY ./entrypoint.sh $APP_HOME
-
 # copy project
 COPY . $APP_HOME
 
