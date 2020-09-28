@@ -1,0 +1,516 @@
+openapi: 3.0.2
+info:
+  title: 'Yatube API'
+  version: ''
+  description: | 
+    API requests started at `/api/v1/`
+    
+    # Description
+    The Yatube API project allows interacting with the Yatube blog platform, perform the CRUD operations with JWT authentication.
+
+    # To obtain the JWT-token
+    1. The User sends a `POST` request with the `username` and `password` at `/token/`.
+    2. **Yatube API** sends a `access` and `refresh` `tokens`.
+
+servers:
+  - url: /api/v1/
+
+tags:
+  - name: POSTS
+    description: Users posts
+  - name: COMMENTS
+    description: Comments
+  - name: AUTH
+  - name: FOLLOW
+    description: Subscriptions
+  - name: GROUP
+    description: Groups
+
+paths:
+  /posts/:
+    get:
+      tags:
+        - POSTS
+      description: 'Get a list of all posts'
+      parameters:
+      - name: group
+        in: query
+        description: Group ID
+        schema:
+          type: number
+      responses:
+        200:
+          description: List of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+    post:
+      tags:
+        - POSTS
+      description: Create a new post
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        200:
+          description: 'New post'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+  /posts/{id}/:
+    get:
+      tags:
+        - POSTS
+      description: Get a post by id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Post ID
+        schema:
+          type: number
+      responses:
+        200:
+          description: Post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        400:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+    put:
+      tags:
+        - POSTS
+      description: 'Update a post by id'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Post ID
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        200:
+          description: Post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        400:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+    patch:
+      tags:
+        - POSTS
+      description: Partial update a post by id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Post ID
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        200:
+          description: Post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        400:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+    delete:
+      tags:
+        - POSTS
+      description: Delete a post by id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Post ID
+        schema:
+          type: number
+      responses:
+        204:
+          description: ''
+  /posts/{post_id}/comments/:
+    get:
+      tags:
+        - COMMENTS
+      description: 'Get a list of all comments by post id'
+      parameters:
+      - name: post_id
+        in: path
+        required: true
+        description: Post ID
+        schema:
+          type: number
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+          description: ''
+
+    post:
+      tags:
+        - COMMENTS
+      description: 'Create a new comment on the post'
+      parameters:
+      - name: post_id
+        in: path
+        required: true
+        description: Post ID
+        schema:
+          type: number
+      responses:
+        200:
+          content:
+            application/json:
+              schema: {}
+          description: ''
+  /posts/{post_id}/comments/{comment_id}/:
+    get:
+      tags:
+        - COMMENTS
+      description: 'Get a comment by id'
+      parameters:
+      - name: post_id
+        in: path
+        required: true
+        description: Post ID
+        schema:
+          type: number
+      - name: comment_id
+        in: path
+        required: true
+        description: Comment ID
+        schema:
+          type: number
+      responses:
+        200:
+          content:
+            application/json:
+              schema: {}
+          description: ''
+    put:
+      tags:
+        - COMMENTS
+      description: 'Update a comment by id'
+      parameters:
+      - name: post_id
+        in: path
+        required: true
+        description: Post ID
+        schema:
+          type: number
+      - name: comment_id
+        in: path
+        required: true
+        description: Comment ID
+        schema:
+          type: number
+      responses:
+        200:
+          content:
+            application/json:
+              schema: {}
+          description: ''
+    patch:
+      tags:
+        - COMMENTS
+      description: 'Partial update a comment by id'
+      parameters:
+      - name: post_id
+        in: path
+        required: true
+        description: Post ID
+        schema:
+          type: number
+      - name: comment_id
+        in: path
+        required: true
+        description: Comment ID
+        schema:
+          type: number
+      responses:
+        200:
+          content:
+            application/json:
+              schema: {}
+          description: ''
+    delete:
+      tags:
+        - COMMENTS
+      description: 'Delete a comment by id'
+      parameters:
+      - name: post_id
+        in: path
+        required: true
+        description: Post ID
+        schema:
+          type: number
+      - name: comment_id
+        in: path
+        required: true
+        description: Comment ID
+        schema:
+          type: number
+      responses:
+        204:
+          description: ''
+  /token/:
+    post:
+      tags:
+        - AUTH
+      description: Get a JWT-token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  writeOnly: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWTToken'
+          description: ''
+        400:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /token/refresh/:
+    post:
+      tags:
+        - AUTH
+      description: Update a JWT-token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - refresh
+              properties:
+                refresh:
+                  type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                properties:
+                  refresh:
+                    type: string
+                required:
+                - refresh
+          description: ''
+
+  /follow/:
+    get:
+      tags:
+        - FOLLOW
+      description: Get a list of all followers
+      parameters:
+      - name: search
+        in: query
+        description: follower or following username
+        schema:
+          type: string
+      responses:
+        200:
+          description: List of followers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Follow'
+    post:
+      tags:
+        - FOLLOW
+      description: Subscirbe
+      parameters:
+      - name: user
+        in: query
+        description: Username
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - following
+              properties:
+                following:
+                  type: string
+      responses:
+        200:
+          description: Follow
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Follow'
+
+  /group/:
+    get:
+      tags:
+        - GROUP
+      description: Get a list of all groups
+      parameters: []
+      responses:
+        200:
+          description: List of groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+    post:
+      tags:
+        - GROUP
+      description: Create a new group
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+      responses:
+        200:
+          description: 'New group'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+
+
+components:
+  schemas:
+    Post:
+      title: Post
+      type: object
+      description: Post details
+      required:
+          - text
+      properties:
+        id:
+          type: integer
+          title: Post ID
+          readOnly: true
+        text:
+          type: string
+          title: Post text
+        author:
+          type: string
+          title: author username
+          readOnly: true
+        pub_date:
+          type: string
+          format: date-time
+          title: Pub date
+          readOnly: true
+    ValidationError:
+      title: Validation Error
+      type: object
+      properties:
+        field_name:
+          type: array
+          items:
+            type: string
+    JWTToken:
+      title: JWT Token
+      type: object
+      properties:
+        access:
+          type: string
+          title: access token
+        refresh:
+          type: string
+          title: refresh token
+    Comment:
+      title: Comment
+      type: object
+      description: Comment details
+      required:
+          - text
+      properties:
+        id:
+          type: integer
+          title: Comment ID
+          readOnly: true
+        text:
+          type: string
+          title: Comment text
+        author:
+          type: string
+          title: author username
+          readOnly: true
+        pub_date:
+          type: string
+          format: date-time
+          title: Pub date
+          readOnly: true
+    Follow:
+      title: Followers
+      type: object
+      properties:
+        user:
+          type: string
+          title: follower username
+        following:
+          type: string
+          title: following username
+    Group:
+      title: Groups
+      type: object
+      properties:
+        title:
+          type: string
+          title: Who to follow

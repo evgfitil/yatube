@@ -25,7 +25,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "*"
@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sorl.thumbnail',
+    'api',
+    'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -166,3 +169,15 @@ CACHES = {
         }
     }
 }
+REST_FRAMEWORK = {
+        'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        ],
+        'DEFAULT_AUTHENTICATION_CLASSES': [
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
+        ],
+        'DEFAULT_FILTER_BACKENDS': [
+            'django_filters.rest_framework.DjangoFilterBackend',
+        ],
+        'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    }

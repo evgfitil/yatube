@@ -19,6 +19,7 @@ from django.contrib.flatpages import views
 from django.conf.urls import handler404, handler500
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 
 handler404 = "posts.views.page_not_found" # noqa
@@ -29,9 +30,13 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # flatpages
     path("about/", include("django.contrib.flatpages.urls")),
+    # api urls
+    path('api/v1/', include('api.urls')),
     # register and authorization
     path("auth/", include("users.urls")),
     path("auth/", include("django.contrib.auth.urls")),
+    # redoc api documentation
+    path('redoc/', TemplateView.as_view(template_name='redoc.html'), name='redoc'),
     # import from posts
     path("", include("posts.urls")),
 ]
