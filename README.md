@@ -41,7 +41,7 @@ Demo site https://yatube.ea4ws.tk available with authentication methods and anon
   2. Copy or rename `.env.local-example` file to `.env`
   3. Create and activate a virtual environment
   ```
-  pytho3 -m venv venv
+  python3 -m venv venv
   source ./venv/bin/activate
   ```
   4. Install dependencies
