@@ -36,7 +36,10 @@ urlpatterns = [
     path("auth/", include("users.urls")),
     path("auth/", include("django.contrib.auth.urls")),
     # redoc api documentation
-    path('redoc/', TemplateView.as_view(template_name='redoc.html'), name='redoc'),
+    path(
+        'redoc/', TemplateView.as_view(template_name='redoc.html'),
+        name='redoc'
+    ),
     # import from posts
     path("", include("posts.urls")),
 ]
@@ -44,13 +47,23 @@ urlpatterns = [
 urlpatterns += [
     path("about-us/", views.flatpage, {"url": "/about-us/"}, name="about"),
     path("terms/", views.flatpage, {"url": "/terms/"}, name="terms"),
-    path("about-author/", views.flatpage, {"url": "/about-author/"}, name="about-author"),
-    path("about-spec/", views.flatpage, {"url": "/about-spec/"}, name="about-spec"),
+    path(
+        "about-author/", views.flatpage, {"url": "/about-author/"},
+        name="about-author"
+    ),
+    path(
+        "about-spec/", views.flatpage, {"url": "/about-spec/"},
+        name="about-spec"
+    ),
 ]
 
 if settings.DEBUG:
     # import debug_toolbar
 
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )
+    urlpatterns += static(
+        settings.STATIC_URL, document_root=settings.STATIC_ROOT
+    )
     # urlpatterns += (path("__debug__/", include(debug_toolbar.urls)),)
