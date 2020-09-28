@@ -24,3 +24,6 @@ psycopg2-binary           # via postgresql
 gunicorn==19.9.0
 python-dotenv
 django-redis
+djangorestframework
+djangorestframework-simplejwt
+django-filter
