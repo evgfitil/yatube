@@ -1,7 +1,7 @@
 # BUILDER stage
 #
 # pull official base image
-FROM python:3.8.0-alpine as builder
+FROM python:3.8-alpine as builder
 LABEL stage=builder
 
 # set working directory
@@ -33,7 +33,7 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 # FINAL stage
 #
 # pull official base image
-FROM python:3.8.0-alpine
+FROM python:3.8-alpine
 
 # create directory for the app user
 RUN mkdir -p /home/app
@@ -69,4 +69,5 @@ RUN chown -R app:app $APP_HOME
 
 # change user and run
 USER app
-ENTRYPOINT ["/home/app/web/entrypoint.sh"]
+RUN ./manage.py collectstatic --no-input
+CMD gunicorn yatube.wsgi:application --bind 0:8000
