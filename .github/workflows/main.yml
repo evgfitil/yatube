@@ -20,9 +20,6 @@ jobs:
           pip install flake8
           pip install -r requirements.txt
 
-      - name: Run project tests
-        run: pytest
-
       - name: Lint wiht flake8
         run: flake8 . --exclude=./api/migrations/*,./posts/migrations/*,./yatube/settings.py,./tests/*,./posts/tests.py
 
