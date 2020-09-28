@@ -20,5 +20,26 @@ jobs:
           pip install flake8
           pip install -r requirements.txt
 
+      - name: Run project tests
+        run: pytest
+
       - name: Lint wiht flake8
         run: flake8 . --exclude=./api/migrations/*,./posts/migrations/*,./yatube/settings.py,./tests/*,./posts/tests.py
+
+  build_and_push:
+    name: Build and push to the Docker Hub
+    runs-on: ubuntu-latests
+    needs: tests
+    steps:
+      - name: Check out the repo
+          uses: actions/checkout@v1
+
+      - name: Push to the Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          path: ./
+          dockerfile: ./Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: evgfitil/yatube
+          tag_with_ref: true
