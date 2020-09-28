@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  web:
+    image: evgfitil/yatube
+    container_name: yt-web
+    command: gunicorn yatube.wsgi --bind 0.0.0.0:8000
+    networks:
+      - yatube
+    volumes:
+      - static_volume:/home/app/web/static
+      - media_volume:/home/app/web/media
+    expose:
+      - 8000
+    env_file:
+      - .env
+    depends_on:
+      - db
+  db:
+    container_name: yt-db
+    image: postgres:12.0-alpine
+    networks:
+      - yatube
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env.db
+  nginx:
+    container_name: yt-nginx
+    build: ./nginx
+    networks:
+      - yatube
+      - traefik
+    volumes:
+      - static_volume:/home/app/web/static
+      - media_volume:/home/app/web/media
+    expose:
+      - 80
+      - 443
+    depends_on:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx_yatube.rule=Host(`yatube.ea-praktikum.ml`)"
+      - "traefik.http.routers.nginx_yatube.entrypoints=websecure"
+      - "traefik.http.routers.nginx_yatube.tls.certresolver=myresolver"
+      - "traefik.docker.network=traefik"
+  cache:
+    container_name: yt-cache
+    image: redis:alpine
+    networks:
+      - yatube
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    expose:
+      - 6379
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+networks:
+  traefik:
+    external:
+      name: traefik
+  yatube:
+    external: false
