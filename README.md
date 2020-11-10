@@ -42,20 +42,27 @@ Demo site https://yatube.evgfitil.ml available with authentication methods and a
   1. Clone this repository
   2. Copy or rename `.env.local-example` file to `.env`
   3. Create and activate a virtual environment
+
   ```
   python3 -m venv venv
   source ./venv/bin/activate
   ```
+
   4. Install dependencies
+
   ```
   pip install -r requirements.txt
   ```
+
   5. To apply migrations and create a Django admin user run:
+
   ```
   python manage.py migrate
   python manage.py createsuperuser
   ```
+
   6. Start server locally
+  
   ```
   python manage.py runserver
   ```
