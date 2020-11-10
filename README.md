@@ -6,7 +6,7 @@
 
 Yatube users can post their articles, attach images to them, read articles of other authors, exchange comments and follow to favourite authors.
 
-Demo site https://yatube.ea-praktikum.ml available with authentication methods and anonymous access.
+Demo site https://yatube.evgfitil.ml available with authentication methods and anonymous access.
 
 ### Developing and testing locally (Quick Start)
 
